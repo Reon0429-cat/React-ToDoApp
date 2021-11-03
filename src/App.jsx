@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./styles.css";
-
+// 関数に引数を渡すときはアロー関数にする(()=>onClickDelete(index))
 export const App = () => {
   const [todoText, setTodoText] = useState("");
   const [incompleteTODOs, setIncompleteTODOs] = useState(["AAA", "BBB"]);
@@ -11,6 +11,18 @@ export const App = () => {
     const newTodos = [...incompleteTODOs, todoText];
     setIncompleteTODOs(newTodos);
     setTodoText("");
+  };
+  const onClickDelete = (index) => {
+    const newTodos = [...incompleteTODOs];
+    newTodos.splice(index, 1);
+    setIncompleteTODOs(newTodos);
+  };
+  const onClickComplete = (index) => {
+    const newIncompleteTodos = [...incompleteTODOs];
+    newIncompleteTodos.splice(index, 1);
+    const newCompleteTodos = [...completeTODOs, incompleteTODOs[index]];
+    setIncompleteTODOs(newIncompleteTodos);
+    setCompleteTODOs(newCompleteTodos);
   };
   return (
     <>
@@ -25,12 +37,12 @@ export const App = () => {
       <div className="incomplete-area">
         <p className="title">未完了のToDo</p>
         <ul>
-          {incompleteTODOs.map((todo) => {
+          {incompleteTODOs.map((todo, index) => {
             return (
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>完了</button>
-                <button>削除</button>
+                <button onClick={() => onClickComplete(index)}>完了</button>
+                <button onClick={() => onClickDelete(index)}>削除</button>
               </div>
             );
           })}
