@@ -3,8 +3,8 @@ import "./styles.css";
 // 関数に引数を渡すときはアロー関数にする(()=>onClickDelete(index))
 export const App = () => {
   const [todoText, setTodoText] = useState("");
-  const [incompleteTODOs, setIncompleteTODOs] = useState(["AAA", "BBB"]);
-  const [completeTODOs, setCompleteTODOs] = useState(["CCC"]);
+  const [incompleteTODOs, setIncompleteTODOs] = useState([]);
+  const [completeTODOs, setCompleteTODOs] = useState([]);
   const onChangeTodoText = (event) => setTodoText(event.target.value);
   const onClickAdd = () => {
     if (todoText === "") return;
@@ -12,6 +12,7 @@ export const App = () => {
     setIncompleteTODOs(newTodos);
     setTodoText("");
   };
+  
   const onClickDelete = (index) => {
     const newTodos = [...incompleteTODOs];
     newTodos.splice(index, 1);
@@ -21,6 +22,13 @@ export const App = () => {
     const newIncompleteTodos = [...incompleteTODOs];
     newIncompleteTodos.splice(index, 1);
     const newCompleteTodos = [...completeTODOs, incompleteTODOs[index]];
+    setIncompleteTODOs(newIncompleteTodos);
+    setCompleteTODOs(newCompleteTodos);
+  };
+  const onClickBack = (index) => {
+    const newCompleteTodos = [...completeTODOs];
+    newCompleteTodos.splice(index, 1);
+    const newIncompleteTodos = [...incompleteTODOs, completeTODOs[index]];
     setIncompleteTODOs(newIncompleteTodos);
     setCompleteTODOs(newCompleteTodos);
   };
@@ -51,11 +59,11 @@ export const App = () => {
       <div className="complete-area">
         <p className="title">完了のToDo</p>
         <ul>
-          {completeTODOs.map((todo) => {
+          {completeTODOs.map((todo, index) => {
             return (
               <div key={todo} className="list-row">
                 <li>{todo}</li>
-                <button>戻す</button>
+                <button onClick={() => onClickBack(index)}>戻す</button>
               </div>
             );
           })}
